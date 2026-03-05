@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "xxQKNV0lsmk=",
+  "success": true,
+  "projectFilePath": "/home/travis/Projects/DotNetDistributedExecutionEngine/DistributedExecutionEngine.Host/DistributedExecutionEngine.Host.csproj",
+  "expectedPackageFiles": [
+    "/home/travis/.nuget/packages/microsoft.aspnetcore.app.ref/10.0.3/microsoft.aspnetcore.app.ref.10.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
