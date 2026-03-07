@@ -4,6 +4,6 @@ public enum JobStatus
 {
     Pending = 0,
     Running = 1,
-    Finished = 2,
-    Failed = 3
+    Failed = 2,
+    Succeeded = 4,
 }
