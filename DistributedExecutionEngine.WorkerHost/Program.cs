@@ -1,3 +1,12 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using DistributedExecutionEngine.Application;
+using DistributedExecutionEngine.Infrastructure;
+using DistributedExecutionEngine.WorkerHost;
+using Microsoft.Extensions.Hosting;
+using DependencyInjection = DistributedExecutionEngine.WorkerHost.DependencyInjection;
 
-Console.WriteLine("Hello, World!");
+var builder = Host.CreateApplicationBuilder(args);
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddWorkerHost();
+var host = builder.Build();
+await host.RunAsync();
