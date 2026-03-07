@@ -10,10 +10,19 @@ public class JobConfiguration : IEntityTypeConfiguration<Job>
     {
         builder.HasKey(x => x.Id);
         
+        builder.Property(x => x.Guid)
+            .HasColumnType("uuid")
+            .IsRequired();
+
+        builder.HasIndex(x => x.Guid).IsUnique();
+        
         builder.Property(x => x.PayloadJson)
             .HasColumnType("jsonb");
 
         builder.Property(x => x.Status)
             .HasConversion<int>();
+
+        builder.Property(x => x.JobType)
+            .IsRequired();
     }
 }

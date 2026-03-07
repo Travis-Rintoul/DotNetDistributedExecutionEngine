@@ -18,12 +18,14 @@ namespace DistributedExecutionEngine.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Guid = table.Column<int>(type: "integer", nullable: false),
+                    Guid = table.Column<Guid>(type: "uuid", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     PayloadJson = table.Column<string>(type: "jsonb", nullable: true),
+                    JobType = table.Column<string>(type: "text", nullable: false),
                     CreatedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     StartedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     CompletedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    LeasedUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     AssignedWorkerId = table.Column<int>(type: "integer", nullable: true),
                     AttemptsCount = table.Column<int>(type: "integer", nullable: false),
                     MaxAttemptsCount = table.Column<int>(type: "integer", nullable: false)
@@ -37,7 +39,8 @@ namespace DistributedExecutionEngine.Infrastructure.Migrations
                 name: "Workers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Hostname = table.Column<string>(type: "text", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     MaxConcurrency = table.Column<int>(type: "integer", nullable: false),
@@ -47,6 +50,12 @@ namespace DistributedExecutionEngine.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Workers", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jobs_Guid",
+                table: "Jobs",
+                column: "Guid",
+                unique: true);
         }
 
         /// <inheritdoc />

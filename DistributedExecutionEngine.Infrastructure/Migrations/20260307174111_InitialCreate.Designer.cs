@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DistributedExecutionEngine.Infrastructure.Migrations
 {
     [DbContext(typeof(OrchestratorDbContext))]
-    [Migration("20260305124946_InitialCreate")]
+    [Migration("20260307174111_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -45,8 +45,15 @@ namespace DistributedExecutionEngine.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedUtc")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Guid")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("JobType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LeasedUtc")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MaxAttemptsCount")
                         .HasColumnType("integer");
@@ -62,13 +69,19 @@ namespace DistributedExecutionEngine.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Guid")
+                        .IsUnique();
+
                     b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("DistributedExecutionEngine.Domain.Entities.Worker", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Hostname")
                         .IsRequired()
