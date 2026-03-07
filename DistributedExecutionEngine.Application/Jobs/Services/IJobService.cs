@@ -1,0 +1,9 @@
+using DistributedExecutionEngine.Domain.Entities;
+
+namespace DistributedExecutionEngine.Application.Jobs.Services;
+
+public interface IJobService
+{
+    Task<Job?> LeaseJob(int workerId);
+    Task ScheduleJob(Job job);
+}
