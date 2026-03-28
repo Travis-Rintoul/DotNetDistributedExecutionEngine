@@ -18,7 +18,22 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\DistributedExecutionEngine.Application\DistributedExecutionEngine.Application.csproj" />
       <ProjectReference Include="..\DistributedExecutionEngine.Infrastructure\DistributedExecutionEngine.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DistributedExecutionEngine.WorkerHost\DistributedExecutionEngine.WorkerHost.csproj">
+        <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+        <OutputItemType>Content</OutputItemType>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </ProjectReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
