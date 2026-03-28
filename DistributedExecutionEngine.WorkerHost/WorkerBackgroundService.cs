@@ -15,7 +15,7 @@ public sealed class WorkerBackgroundService(
 {
     protected override async Task ExecuteAsync(CancellationToken token)
     {
-        Console.WriteLine($"[worker)] Starting Worker...)]");
+        logger.LogWarning("[worker)] Starting Worker...)]");
         
         var workerId = await workerService.RegisterWorker();
 
@@ -25,7 +25,7 @@ public sealed class WorkerBackgroundService(
 
             await Task.Delay(500, token);
             
-            Console.WriteLine($"[worker ({workerId})] worker waiting)]");
+            logger.LogInformation($"[worker ({workerId})] worker waiting)]");
         }
     }
 }

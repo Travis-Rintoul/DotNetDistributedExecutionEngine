@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddProvisionerHost();
+builder.Services.AddLauncherHost();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 

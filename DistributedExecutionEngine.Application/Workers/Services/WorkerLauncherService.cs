@@ -11,35 +11,42 @@ public sealed class WorkerLauncherService(
 {
     public Task StartWorkerAsync(CancellationToken token)
     {
-        var workerPath = configuration["Worker:ExecutablePath"];
-        
-        var process = new Process();
+        var workerDir = "/home/travis/Projects/DotNetDistributedExecutionEngine/DistributedExecutionEngine.WorkerHost/bin/Release/net10.0/linux-x64/publish";
+        var workerPath = Path.Combine(workerDir, "DistributedExecutionEngine.WorkerHost");
 
-        process.StartInfo = new ProcessStartInfo
+        var process = new Process
         {
-            FileName = workerPath,
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = workerPath,
+                WorkingDirectory = workerDir,
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            }
         };
-
+        
         process.OutputDataReceived += (_, e) =>
         {
-            if (e.Data != null)
-                logger.LogInformation("[Worker] {Output}", e.Data);
+            if (e.Data == null) return;
+            
+            logger.LogInformation("[Worker] {Output}", e.Data);
+            Console.WriteLine($"[Worker] {e.Data}");
         };
         
         process.ErrorDataReceived += (_, e) =>
         {
-            if (e.Data != null)
-                logger.LogError("[Worker] {Output}", e.Data);
+            if (e.Data == null) return;
+            
+            logger.LogError("[Worker] {Output}", e.Data);
+            Console.WriteLine($"[Worker] {e.Data}");
         };
         
         process.Start();
         process.BeginOutputReadLine();
         process.BeginErrorReadLine();
         
-        logger.LogInformation("Worker started. PID {Pid}", process.Id);
+        logger.LogCritical("Worker started. PID {Pid}", process.Id);
         
         return Task.CompletedTask;
     }
