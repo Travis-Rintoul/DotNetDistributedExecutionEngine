@@ -1,4 +1,4 @@
-# Build outputs
+# .NET build outputs
 bin/
 obj/
 
@@ -6,3 +6,5 @@ obj/
 .idea/
 .vs/
 
+# OS noise
+*.log
