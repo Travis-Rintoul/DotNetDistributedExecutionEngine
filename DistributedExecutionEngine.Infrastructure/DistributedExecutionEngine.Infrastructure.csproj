@@ -7,16 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Persistence\Repositories\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="Microsoft.EntityFrameworkCore">
         <HintPath>..\..\..\.nuget\packages\microsoft.entityframeworkcore\10.0.3\lib\net10.0\Microsoft.EntityFrameworkCore.dll</HintPath>
       </Reference>
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\DistributedExecutionEngine.Application\DistributedExecutionEngine.Application.csproj" />
       <ProjectReference Include="..\DistributedExecutionEngine.Domain\DistributedExecutionEngine.Domain.csproj" />
     </ItemGroup>
 

@@ -9,4 +9,10 @@ public static class DependencyInjection
         services.AddHostedService<ProvisionerBackgroundService>();
         return services;
     }
+    
+    public static IServiceCollection AddLauncherHost(this IServiceCollection services)
+    {
+        services.AddHostedService<WorkerLauncherBackgroundService>();
+        return services;
+    }
 }

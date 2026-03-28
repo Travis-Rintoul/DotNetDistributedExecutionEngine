@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v10.0": {
       "DistributedExecutionEngine.Infrastructure/1.0.0": {
         "dependencies": {
+          "DistributedExecutionEngine.Application": "1.0.0",
           "DistributedExecutionEngine.Domain": "1.0.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "10.0.0"
         },
@@ -174,6 +175,17 @@
           }
         }
       },
+      "DistributedExecutionEngine.Application/1.0.0": {
+        "dependencies": {
+          "DistributedExecutionEngine.Domain": "1.0.0"
+        },
+        "runtime": {
+          "DistributedExecutionEngine.Application.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "DistributedExecutionEngine.Domain/1.0.0": {
         "runtime": {
           "DistributedExecutionEngine.Domain.dll": {
@@ -287,6 +299,11 @@
       "sha512": "sha512-E2+uSWxSB8LdsUVwPaqRWOcGOP92biry2JEwc0KJMdLJF+aZdczeIdEXVwEyv4nSVMQJH0o8tLhyAMiR6VF0lw==",
       "path": "npgsql.entityframeworkcore.postgresql/10.0.0",
       "hashPath": "npgsql.entityframeworkcore.postgresql.10.0.0.nupkg.sha512"
+    },
+    "DistributedExecutionEngine.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "DistributedExecutionEngine.Domain/1.0.0": {
       "type": "project",

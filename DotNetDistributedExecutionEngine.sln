@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedExecutionEngine.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedExecutionEngine.WorkerHost", "DistributedExecutionEngine.WorkerHost\DistributedExecutionEngine.WorkerHost.csproj", "{801F99D8-D4A0-4D1B-B3A3-BD1877BBDCCC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedExecutionEngine.API", "DistributedExecutionEngine.API\DistributedExecutionEngine.API.csproj", "{B9C1C511-EB82-4372-924F-FB8A242AB747}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{801F99D8-D4A0-4D1B-B3A3-BD1877BBDCCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{801F99D8-D4A0-4D1B-B3A3-BD1877BBDCCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{801F99D8-D4A0-4D1B-B3A3-BD1877BBDCCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9C1C511-EB82-4372-924F-FB8A242AB747}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9C1C511-EB82-4372-924F-FB8A242AB747}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9C1C511-EB82-4372-924F-FB8A242AB747}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9C1C511-EB82-4372-924F-FB8A242AB747}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
