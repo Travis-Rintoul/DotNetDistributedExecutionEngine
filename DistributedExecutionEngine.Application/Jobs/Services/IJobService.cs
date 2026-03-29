@@ -7,4 +7,5 @@ public interface IJobService
 {
     Task<Job?> LeaseJob(int workerId);
     Task ScheduleJob(Job job);
+    Task<int> PendingJobsCountAsync();
 }
