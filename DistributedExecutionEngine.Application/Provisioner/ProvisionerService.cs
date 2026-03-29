@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using DistributedExecutionEngine.Application.Workers.Services;
 using DistributedExecutionEngine.Domain.Entities;
 using DistributedExecutionEngine.Domain.Repositories;
@@ -10,7 +13,7 @@ public sealed class ProvisionerService(
     IWorkerRepository workerRepository
 ) : IProvisionerService
 {
-    public async Task StartScaling(CancellationToken cancellationToken)
+    public async Task StartScaling()
     {
         var pending = await jobRepository.PendingJobsCountAsync();
         var workers = await workerRepository.Count();
@@ -19,10 +22,6 @@ public sealed class ProvisionerService(
         {
             Console.WriteLine($"[Provisioner] {pending} workers were provisioned");
             await workerRepository.RegisterWorkerAsync(Worker.Create("worker"));
-        }
-        else
-        {
-            Console.WriteLine("[Provisioner] no workers were needed");
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace DistributedExecutionEngine.Library.Domain.Enums;
+namespace DistributedExecutionEngine.Domain.Enums;
 
 public enum JobStatus
 {

@@ -1,4 +1,4 @@
-namespace DistributedExecutionEngine.Library.Application.Worker;
+namespace DistributedExecutionEngine.Domain.Enums;
 
 [Flags]
 public enum WorkerCapability

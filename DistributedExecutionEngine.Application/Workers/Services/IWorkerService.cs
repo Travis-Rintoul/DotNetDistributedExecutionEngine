@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace DistributedExecutionEngine.Application.Workers.Services;
 
 public interface IWorkerService

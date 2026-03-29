@@ -1,4 +1,4 @@
-using DistributedExecutionEngine.Library.Domain.Enums;
+using DistributedExecutionEngine.Domain.Enums;
 
 namespace DistributedExecutionEngine.Domain.Entities;
 

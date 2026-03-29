@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace DistributedExecutionEngine.Application.Jobs.Services;
 
 public interface IJobExecutorService
