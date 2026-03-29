@@ -15,8 +15,8 @@ public sealed class ProvisionerService(
 {
     public async Task StartScaling()
     {
-        var pending = await jobRepository.PendingJobsCountAsync();
-        var workers = await workerRepository.Count();
+        var pending = await jobRepository.CountPendingAsync();
+        var workers = await workerRepository.CountAsync();
 
         if (pending - workers > workers)
         {

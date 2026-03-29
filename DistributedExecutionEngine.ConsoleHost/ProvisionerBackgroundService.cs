@@ -26,7 +26,7 @@ public sealed class ProvisionerBackgroundService(
 
                 var provisionerService = scope.ServiceProvider.GetRequiredService<IProvisionerService>();
                 
-                await provisionerService.StartScaling(token);
+                await provisionerService.StartScaling();
             }
             catch (Exception ex)
             {

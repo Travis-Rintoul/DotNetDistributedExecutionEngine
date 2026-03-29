@@ -2,40 +2,50 @@ using DistributedExecutionEngine.Application.Jobs.Services;
 using DistributedExecutionEngine.Application.Workers;
 using DistributedExecutionEngine.Application.Workers.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace DistributedExecutionEngine.WorkerHost;
 
-public sealed class WorkerBackgroundService(
-    IWorkerService workerService,
-    IJobService jobService,
-    IJobExecutorService executor,
-    ILogger<WorkerBackgroundService> logger,
-    IConfiguration config
-) : BackgroundService
+public sealed class WorkerOptions
 {
-    private readonly int _workerId = int.Parse(config["worker-id"]!);
-    
+    public int WorkerId { get; set; }
+}
+
+public sealed class WorkerBackgroundService(IServiceScopeFactory scopeFactory, ILogger<WorkerBackgroundService> logger, IOptions<WorkerOptions> options) : BackgroundService
+{
     protected override async Task ExecuteAsync(CancellationToken token)
     {
-        logger.LogWarning($"Starting Worker ({_workerId})...)]");
+        var workerId = options.Value.WorkerId;
+        
+        logger.LogWarning($"Starting Worker ({workerId})...)]");
         
         while (!token.IsCancellationRequested)
         {
-            var job = await jobService.LeaseJob(_workerId);
-
-            if (job != null)
-            {
-                logger.LogInformation($"Worker ({_workerId}) found job: {job.Id}");
-
-                var result = await executor.ExecuteJob(job);
-                
-                logger.LogInformation($"JOB RESULT: {result.Message}");
-            }
+            using var scope = scopeFactory.CreateScope();
+            var jobService = scope.ServiceProvider.GetRequiredService<IJobService>();
+            var jobExecutorService = scope.ServiceProvider.GetRequiredService<IJobExecutorService>();
             
-            await Task.Delay(TimeSpan.FromSeconds(1), token);   
+            try
+            {
+                var job = await jobService.LeaseJob(workerId);
+                if (job is null)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1), token);
+                    continue;
+                }
+                
+                logger.LogInformation($"Worker ({workerId}) found job: {job.Id}");
+                var result = await jobExecutorService.ExecuteJob(job);
+                
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Worker loop failure");
+                await Task.Delay(TimeSpan.FromSeconds(5), token); // backoff
+            }
         }
     }
 }
