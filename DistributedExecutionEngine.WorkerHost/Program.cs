@@ -1,10 +1,18 @@
 ﻿using DistributedExecutionEngine.Application;
 using DistributedExecutionEngine.Infrastructure;
 using DistributedExecutionEngine.WorkerHost;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using DependencyInjection = DistributedExecutionEngine.WorkerHost.DependencyInjection;
+
 
 var builder = Host.CreateApplicationBuilder(args);
+
+builder.Services.Configure<WorkerOptions>(o =>
+{
+    o.WorkerId = builder.Configuration.GetValue<int>("worker-id");
+});
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddWorkerHost();
