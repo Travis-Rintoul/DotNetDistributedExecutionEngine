@@ -39,19 +39,15 @@ public sealed class WorkerRepository(OrchestratorDbContext context) : IWorkerRep
         return results.SingleOrDefault();
     }
 
-    public Task MarkWorkerAsRunningAsync(Worker worker)
-    {
-        worker.Status = WorkerStatus.Running;
-        context.Workers.Update(worker);
-        return context.SaveChangesAsync();
-    }
+    public async Task<Worker?> GetByIdAsync(int id)
+        => await context.Workers.FirstOrDefaultAsync(x => x.Id == id);
 
-    public async Task UpdateHeartbeat(Worker worker)
+    public async Task SaveAsync(Worker worker)
     {
-        worker.LastHeartbeatAt = DateTime.UtcNow;
+        context.Workers.Update(worker);
         await context.SaveChangesAsync();
     }
 
-    public Task<int> Count()
-        => Task.FromResult(context.Workers.Count());
+    public async Task<int> CountAsync()
+        => await context.Workers.CountAsync();
 }

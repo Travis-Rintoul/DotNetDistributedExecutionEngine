@@ -8,4 +8,16 @@ public sealed class WorkerService(IWorkerRepository workerRepository) : IWorkerS
 {
     public async Task<int> RegisterWorker()
         => await workerRepository.RegisterWorkerAsync(new Worker());
+
+    public async Task MarkRunning(Worker worker)
+    {
+        worker.MarkRunning();
+        await workerRepository.SaveAsync(worker);
+    }
+
+    public async Task Heartbeat(Worker worker)
+    {
+        worker.UpdateHeartbeat();
+        await workerRepository.SaveAsync(worker);
+    }
 }
