@@ -84,6 +84,9 @@ namespace DistributedExecutionEngine.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("InstanceId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("LastHeartbeatAt")
                         .HasColumnType("timestamp with time zone");
 
