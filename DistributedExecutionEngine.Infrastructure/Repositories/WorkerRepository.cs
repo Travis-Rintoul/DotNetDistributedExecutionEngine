@@ -1,7 +1,7 @@
 using DistributedExecutionEngine.Domain.Entities;
+using DistributedExecutionEngine.Domain.Enums;
 using DistributedExecutionEngine.Domain.Repositories;
 using DistributedExecutionEngine.Infrastructure.Persistence;
-using DistributedExecutionEngine.Library.Application.Worker;
 using Microsoft.EntityFrameworkCore;
 
 namespace DistributedExecutionEngine.Infrastructure.Repositories;
@@ -37,6 +37,13 @@ public sealed class WorkerRepository(OrchestratorDbContext context) : IWorkerRep
             .ToListAsync();
 
         return results.SingleOrDefault();
+    }
+
+    public Task MarkWorkerAsRunningAsync(Worker worker)
+    {
+        worker.Status = WorkerStatus.Running;
+        context.Workers.Update(worker);
+        return context.SaveChangesAsync();
     }
 
     public async Task UpdateHeartbeat(Worker worker)

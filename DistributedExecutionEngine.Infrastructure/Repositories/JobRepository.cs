@@ -1,7 +1,7 @@
 using DistributedExecutionEngine.Domain.Entities;
+using DistributedExecutionEngine.Domain.Enums;
 using DistributedExecutionEngine.Domain.Repositories;
 using DistributedExecutionEngine.Infrastructure.Persistence;
-using DistributedExecutionEngine.Library.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DistributedExecutionEngine.Infrastructure.Repositories;
@@ -22,6 +22,8 @@ public sealed class JobRepository(OrchestratorDbContext context) : IJobRepositor
         job.Status = JobStatus.Running;
         job.AssignedWorkerId = workerId;
         job.LeasedUtc = DateTime.UtcNow;
+        
+        context.Jobs.Update(job);
 
         await context.SaveChangesAsync();
         

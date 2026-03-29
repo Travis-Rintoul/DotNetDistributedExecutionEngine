@@ -1,3 +1,4 @@
+using DistributedExecutionEngine.Application.Provisioner;
 using DistributedExecutionEngine.Application.Workers.Services;
 using DistributedExecutionEngine.Domain.Repositories;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,13 +19,16 @@ public class WorkerLauncherBackgroundService(IServiceScopeFactory scopeFactory, 
                 using var scope = scopeFactory.CreateScope();
 
                 var repo = scope.ServiceProvider.GetRequiredService<IWorkerRepository>();
+                var launcher = scope.ServiceProvider.GetRequiredService<IWorkerLauncherService>();
 
                 var worker = await repo.ClaimPendingWorkerAsync();
-
                 if (worker != null)
                 {
                     Console.WriteLine($"[WorkerLauncher] claimed worker {worker.Id}");
+                    await launcher.StartWorkerAsync(worker.Id,  token);
+                    await repo.MarkWorkerAsRunningAsync(worker);
                 }
+                
             }
             catch (Exception ex)
             {
