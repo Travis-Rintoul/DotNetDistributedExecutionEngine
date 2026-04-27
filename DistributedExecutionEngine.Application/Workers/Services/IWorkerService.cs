@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using DistributedExecutionEngine.Domain.Entities;
 
@@ -7,4 +8,5 @@ public interface IWorkerService
 {
     public Task MarkRunning(Worker worker);
     public Task Heartbeat(Worker worker);
+    public Task<bool> ProcessNextJobAsync(Worker worker, CancellationToken token);
 }

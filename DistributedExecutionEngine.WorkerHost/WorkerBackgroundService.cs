@@ -30,15 +30,7 @@ public sealed class WorkerBackgroundService(IServiceScopeFactory scopeFactory, I
             
             try
             {
-                var job = await jobService.LeaseJob(workerId);
-                if (job is null)
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(1), token);
-                    continue;
-                }
-                
-                logger.LogInformation($"Worker ({workerId}) found job: {job.Id}");
-                var result = await jobExecutorService.ExecuteJob(job);
+
                 
             }
             catch (Exception ex)
