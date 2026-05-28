@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedExecutionEngine.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistributedExecutionEngine.API", "DistributedExecutionEngine.API\DistributedExecutionEngine.API.csproj", "{B9C1C511-EB82-4372-924F-FB8A242AB747}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3718DEED-6612-4D71-BF21-CCC663BF02F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetDistributedExecutionEngine.Domain.Tests", "DotNetDistributedExecutionEngine.Domain.Tests\DotNetDistributedExecutionEngine.Domain.Tests.csproj", "{2B2E2794-D0E4-48C7-B6B3-46CCF99765FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +46,12 @@ Global
 		{B9C1C511-EB82-4372-924F-FB8A242AB747}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9C1C511-EB82-4372-924F-FB8A242AB747}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9C1C511-EB82-4372-924F-FB8A242AB747}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B2E2794-D0E4-48C7-B6B3-46CCF99765FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B2E2794-D0E4-48C7-B6B3-46CCF99765FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B2E2794-D0E4-48C7-B6B3-46CCF99765FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B2E2794-D0E4-48C7-B6B3-46CCF99765FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2B2E2794-D0E4-48C7-B6B3-46CCF99765FE} = {3718DEED-6612-4D71-BF21-CCC663BF02F7}
 	EndGlobalSection
 EndGlobal

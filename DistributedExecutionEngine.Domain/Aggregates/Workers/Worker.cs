@@ -1,14 +1,13 @@
 using DistributedExecutionEngine.Domain.Enums;
-using DistributedExecutionEngine.Domain.Repositories;
 
-namespace DistributedExecutionEngine.Domain.Entities;
+namespace DistributedExecutionEngine.Domain.Aggregates.Workers;
 
 public sealed class Worker
 {
     public int Id { get; set; }
-    public Guid InstanceId { get; set; }
+    public WorkerId WorkerId { get; set; }
     public string Hostname { get; set; } = null!;
-    public WorkerStatus Status { get; private set; }
+    public WorkerStatusCode Status { get; private set; }
     public int MaxConcurrency { get; set; }
     public DateTime LastHeartbeatAt { get; private set; }
 
@@ -17,9 +16,9 @@ public sealed class Worker
         return new Worker
         {
             Id = 0,
-            InstanceId = Guid.Empty,
+            WorkerId = WorkerId.New(),
             Hostname = hostname,
-            Status = WorkerStatus.Pending,
+            Status = WorkerStatusCode.Pending,
             MaxConcurrency = Environment.ProcessorCount,
             LastHeartbeatAt = DateTime.MinValue
         };
@@ -27,18 +26,18 @@ public sealed class Worker
 
     public void MarkRunning()
     {
-        if (Status != WorkerStatus.Starting)
+        if (Status != WorkerStatusCode.Starting)
         {
             throw new InvalidOperationException(
                 $"Invalid transition: {Status} -> Running");
         }
         
-        Status = WorkerStatus.Running;
+        Status = WorkerStatusCode.Running;
     }
     
     public void UpdateHeartbeat()
     {
-        if (Status != WorkerStatus.Running)
+        if (Status != WorkerStatusCode.Running)
         {
             throw new InvalidOperationException(
                 "Heartbeat only valid for running workers");

@@ -1,6 +1,6 @@
-namespace DistributedExecutionEngine.Domain.Enums;
+namespace DistributedExecutionEngine.Domain.Aggregates.Workers;
 
-public enum WorkerStatus
+public enum WorkerStatusCode
 {
     Pending = 0,  // Created, not yet claimed
     Starting = 1, // Claimed by launcher, process booting

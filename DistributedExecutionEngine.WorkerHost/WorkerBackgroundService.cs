@@ -1,7 +1,3 @@
-using DistributedExecutionEngine.Application.Jobs.Services;
-using DistributedExecutionEngine.Application.Workers;
-using DistributedExecutionEngine.Application.Workers.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -18,26 +14,27 @@ public sealed class WorkerBackgroundService(IServiceScopeFactory scopeFactory, I
 {
     protected override async Task ExecuteAsync(CancellationToken token)
     {
-        var workerId = options.Value.WorkerId;
-        
-        logger.LogWarning($"Starting Worker ({workerId})...)]");
-        
-        while (!token.IsCancellationRequested)
-        {
-            using var scope = scopeFactory.CreateScope();
-            var jobService = scope.ServiceProvider.GetRequiredService<IJobService>();
-            var jobExecutorService = scope.ServiceProvider.GetRequiredService<IJobExecutorService>();
-            
-            try
-            {
-
-                
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Worker loop failure");
-                await Task.Delay(TimeSpan.FromSeconds(5), token); // backoff
-            }
-        }
+        throw new NotImplementedException();
+        // var workerId = options.Value.WorkerId;
+        //
+        // logger.LogWarning($"Starting Worker ({workerId})...)]");
+        //
+        // while (!token.IsCancellationRequested)
+        // {
+        //     using var scope = scopeFactory.CreateScope();
+        //     var jobService = scope.ServiceProvider.GetRequiredService<IJobService>();
+        //     var jobExecutorService = scope.ServiceProvider.GetRequiredService<IJobExecutorService>();
+        //     
+        //     try
+        //     {
+        //
+        //         
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         logger.LogError(ex, "Worker loop failure");
+        //         await Task.Delay(TimeSpan.FromSeconds(5), token); // backoff
+        //     }
+        // }
     }
 }

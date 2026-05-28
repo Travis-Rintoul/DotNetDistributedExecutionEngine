@@ -1,18 +1,14 @@
-using System;
 using System.Diagnostics;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using DistributedExecutionEngine.Domain.Repositories;
+using DistributedExecutionEngine.Application.Features.Workers.Supervision;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace DistributedExecutionEngine.Application.Workers.Services;
+namespace DistributedExecutionEngine.Infrastructure.Persistence.Workers;
 
 public sealed class WorkerLauncherService(
     ILogger<WorkerLauncherService> logger,
     IConfiguration configuration
-) : IWorkerLauncherService
+) : IWorkerLauncher
 {
     public Task StartWorkerAsync(int workerId, CancellationToken token)
     {

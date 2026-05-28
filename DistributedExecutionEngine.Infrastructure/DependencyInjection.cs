@@ -1,6 +1,9 @@
-using DistributedExecutionEngine.Domain.Repositories;
+using DistributedExecutionEngine.Application.Abstractions.Persistence;
+using DistributedExecutionEngine.Domain.Aggregates.Jobs;
+using DistributedExecutionEngine.Domain.Aggregates.Workers;
 using DistributedExecutionEngine.Infrastructure.Persistence;
-using DistributedExecutionEngine.Infrastructure.Repositories;
+using DistributedExecutionEngine.Infrastructure.Persistence.Jobs;
+using DistributedExecutionEngine.Infrastructure.Persistence.Workers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,9 +17,9 @@ public static class DependencyInjection
         IConfiguration configuration
     )
     {
-        services.AddScoped<IJobRepository, JobRepository>();
-        services.AddScoped<IWorkerRepository, WorkerRepository>();
-        services.AddDbContext<OrchestratorDbContext>(options =>
+        services.AddScoped<IAggregateRepository<Job, JobId>, JobRepository>();
+        services.AddScoped<IAggregateRepository<Worker, WorkerId>, WorkerRepository>();
+        services.AddDbContext<DistributedExecutionDbContext>(options =>
         {
             options.UseNpgsql(
                 configuration.GetConnectionString("Default"));
