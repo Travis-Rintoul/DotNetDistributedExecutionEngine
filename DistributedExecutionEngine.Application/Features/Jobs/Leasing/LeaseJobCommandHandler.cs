@@ -5,7 +5,7 @@ namespace DistributedExecutionEngine.Application.Features.Jobs.Leasing;
 
 public class LeaseJobCommandHandler : ICommandHandler<LeaseJobCommand, Option<JobLease>>
 {
-    public Task<Option<JobLease>> HandleAsync(LeaseJobCommand command)
+    public Task<Option<JobLease>> HandleAsync(LeaseJobCommand command, CancellationToken token = default)
     {
         return Task.FromResult(Option<JobLease>.None);
     }

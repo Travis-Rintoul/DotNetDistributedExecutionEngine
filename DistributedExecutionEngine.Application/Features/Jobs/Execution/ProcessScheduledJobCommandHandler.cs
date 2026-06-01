@@ -5,7 +5,7 @@ namespace DistributedExecutionEngine.Application.Features.Jobs.Execution;
 
 public class ProcessScheduledJobCommandHandler: ICommandHandler<ProcessScheduledJobCommand, Result<JobExecutionResult, JobExecutionError>>
 {
-    public Task<Result<JobExecutionResult, JobExecutionError>> HandleAsync(ProcessScheduledJobCommand command)
+    public Task<Result<JobExecutionResult, JobExecutionError>> HandleAsync(ProcessScheduledJobCommand command, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

@@ -6,7 +6,7 @@ namespace DistributedExecutionEngine.Application.Features.Workers.Health;
 
 public class RecordWorkerHeartbeatCommandHandler : ICommandHandler<RecordWorkerHeartbeatCommand, Result<Unit, WorkerHeartbeatError>>
 {
-    public Task<Result<Unit, WorkerHeartbeatError>> HandleAsync(RecordWorkerHeartbeatCommand command)
+    public Task<Result<Unit, WorkerHeartbeatError>> HandleAsync(RecordWorkerHeartbeatCommand command, CancellationToken token = default)
     {
         throw new NotImplementedException();
     }
