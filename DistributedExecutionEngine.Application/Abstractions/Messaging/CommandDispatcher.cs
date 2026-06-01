@@ -4,7 +4,7 @@ namespace DistributedExecutionEngine.Application.Abstractions.Messaging;
 
 public class CommandDispatcher(IServiceProvider serviceProvider) : ICommandDispatcher
 {
-    public Task<TResult> SendAsync<TCommand, TResult>(TCommand command)
+    public Task<TResult> SendAsync<TResult>(ICommand<TResult> command, CancellationToken cancellationToken = default)
     {
         var handlerType = typeof(ICommandHandler<,>).MakeGenericType(
             command.GetType(),
@@ -12,6 +12,6 @@ public class CommandDispatcher(IServiceProvider serviceProvider) : ICommandDispa
 
         var handler = serviceProvider.GetRequiredService(handlerType);
 
-        return ((dynamic)handler).HandleAsync((dynamic)command, serviceProvider);
+        return ((dynamic)handler).HandleAsync((dynamic)command, cancellationToken);
     }
 }
