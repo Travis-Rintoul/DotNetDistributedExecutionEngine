@@ -1,3 +1,5 @@
+using DistributedExecutionEngine.Domain.Aggregates.Workers;
+
 namespace DistributedExecutionEngine.Domain.Common;
 
 public sealed class Result<TResult, TError>
@@ -53,4 +55,22 @@ public sealed class Result<TResult, TError>
             ? Option<TResult>.Some(_value!)
             : Option<TResult>.None;
 
+}
+
+public static class Result
+{
+    public static Result<Unit, TError> Success<TError>()
+    {
+        return Result<Unit, TError>.Success(Unit.Value);
+    }
+
+    public static Result<Unit, TError> Failure<TError>(TError error)
+    {
+        return Result<Unit, TError>.Failure(error);
+    }
+
+    public static Result<TValue, TError> Success<TValue, TError>(TValue value)
+    {
+        return Result<TValue, TError>.Success(value);
+    }
 }
