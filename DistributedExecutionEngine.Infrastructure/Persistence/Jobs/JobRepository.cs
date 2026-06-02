@@ -9,7 +9,6 @@ public sealed class JobRepository(DistributedExecutionDbContext context) : IAggr
 {
     private async Task<JobRecord?> FindRecordByKey(Guid jobId, CancellationToken ct) =>
         await context.Jobs
-            .Include(job => job.JobType)
             .SingleOrDefaultAsync(job => job.JobId == jobId, cancellationToken: ct);
     
     public async Task<Option<Job>> FindByKeyAsync(JobId key, CancellationToken ct = default)
