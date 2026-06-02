@@ -1,16 +1,19 @@
 using System.Diagnostics;
+using DistributedExecutionEngine.Application.Abstractions;
 using DistributedExecutionEngine.Application.Features.Workers.Supervision;
+using DistributedExecutionEngine.Domain.Aggregates.Workers;
+using DistributedExecutionEngine.Domain.Common;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DistributedExecutionEngine.Infrastructure.Persistence.Workers;
 
-public sealed class WorkerLauncherService(
-    ILogger<WorkerLauncherService> logger,
+public sealed class ProcessWorkerLauncher(
+    ILogger<ProcessWorkerLauncher> logger,
     IConfiguration configuration
-) : IWorkerLauncher
+) : IWorkerProcessLauncher
 {
-    public Task StartWorkerAsync(int workerId, CancellationToken token)
+    public Task<Result<ProcessId, string>> LaunchAsync(WorkerId workerId, CancellationToken token)
     {
         var workerDir = "/home/travis/Projects/DotNetDistributedExecutionEngine/DistributedExecutionEngine.WorkerHost/bin/Release/net10.0/linux-x64/publish";
         var workerPath = Path.Combine(workerDir, "DistributedExecutionEngine.WorkerHost");
@@ -53,8 +56,8 @@ public sealed class WorkerLauncherService(
         process.BeginErrorReadLine();
         
         logger.LogCritical("Worker started. PID {Pid}", process.Id);
-        
-        return Task.CompletedTask;
+
+        return Task.FromResult(Result.Success<ProcessId, string>(new ProcessId(process.Id)));
     }
 
     public Task StopWorkerAsync(int processId, CancellationToken token)
