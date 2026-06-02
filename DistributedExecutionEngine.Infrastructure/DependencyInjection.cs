@@ -1,4 +1,7 @@
 using DistributedExecutionEngine.Application.Abstractions.Persistence;
+using DistributedExecutionEngine.Application.Features.Workers.Lifecycle;
+using DistributedExecutionEngine.Application.Features.Workers.Persistence;
+using DistributedExecutionEngine.Application.Features.Workers.Supervision;
 using DistributedExecutionEngine.Domain.Aggregates.Jobs;
 using DistributedExecutionEngine.Domain.Aggregates.Workers;
 using DistributedExecutionEngine.Infrastructure.Persistence;
@@ -12,11 +15,10 @@ namespace DistributedExecutionEngine.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(
-        this IServiceCollection services,
-        IConfiguration configuration
-    )
+    public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddScoped<IWorkerPoolStore, WorkerPoolStore>();
+        services.AddScoped<IWorkerProcessLauncher, ProcessWorkerLauncher>();
         services.AddScoped<IAggregateRepository<Job, JobId>, JobRepository>();
         services.AddScoped<IAggregateRepository<Worker, WorkerId>, WorkerRepository>();
         services.AddDbContext<DistributedExecutionDbContext>(options =>
@@ -24,7 +26,5 @@ public static class DependencyInjection
             options.UseNpgsql(
                 configuration.GetConnectionString("Default"));
         });
-
-        return services;
     }
 }

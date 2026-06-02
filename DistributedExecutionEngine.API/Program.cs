@@ -7,8 +7,8 @@ using DistributedExecutionEngine.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
