@@ -13,8 +13,8 @@ builder.Services.Configure<WorkerOptions>(o =>
     o.WorkerId = builder.Configuration.GetValue<int>("worker-id");
 });
 
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWorkerHost();
 var host = builder.Build();
 await host.RunAsync();
