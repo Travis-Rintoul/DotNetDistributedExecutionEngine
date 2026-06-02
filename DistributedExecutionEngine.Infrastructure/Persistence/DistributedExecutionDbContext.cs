@@ -1,6 +1,7 @@
 using DistributedExecutionEngine.Application.Abstractions;
 using DistributedExecutionEngine.Application.Abstractions.Persistence;
 using DistributedExecutionEngine.Infrastructure.Persistence.Jobs;
+using DistributedExecutionEngine.Infrastructure.Persistence.JobTypes;
 using DistributedExecutionEngine.Infrastructure.Persistence.Workers;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ public sealed class DistributedExecutionDbContext(DbContextOptions<DistributedEx
 {
     public DbSet<JobRecord> Jobs { get; set; }
     public DbSet<WorkerRecord> Workers { get; set; }
+    public DbSet<JobTypeRecord> JobTypes { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
