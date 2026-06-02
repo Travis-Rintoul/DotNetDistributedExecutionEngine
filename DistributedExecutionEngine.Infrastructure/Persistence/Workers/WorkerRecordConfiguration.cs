@@ -1,3 +1,4 @@
+using DistributedExecutionEngine.Application.Features.Workers.Supervision;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,6 +14,17 @@ public class WorkerRecordConfiguration: IEntityTypeConfiguration<WorkerRecord>
             .HasColumnType("uuid")
             .ValueGeneratedNever()
             .IsRequired();
+
+        builder.Property(x => x.SupervisorId)
+            .HasConversion<int?>(
+                supervisorId => supervisorId.HasValue
+                    ? supervisorId.Value.Value
+                    : null,
+                value => value.HasValue
+                    ? new SupervisorId(value.Value)
+                    : null)
+            .HasColumnType("integer")
+            .ValueGeneratedNever();
 
         builder.HasIndex(x => x.WorkerId)
             .IsUnique();
