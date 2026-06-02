@@ -1,3 +1,4 @@
+using DistributedExecutionEngine.Domain.Common;
 using DistributedExecutionEngine.Domain.Enums;
 
 namespace DistributedExecutionEngine.Domain.Aggregates.Workers;
@@ -24,25 +25,26 @@ public sealed class Worker
         };
     }
 
-    public void MarkRunning()
+    public Result<Unit, string> MarkStarting()
+    {
+        if (Status != WorkerStatusCode.Pending)
+            return Result<Unit, string>.Failure($"Invalid state transition {Status} -> Starting");
+        
+        Status = WorkerStatusCode.Starting;
+        
+        return Result<Unit, string>.Success(Unit.Value);
+    }
+
+    public Result<Unit, string> MarkRunning()
     {
         if (Status != WorkerStatusCode.Starting)
-        {
-            throw new InvalidOperationException(
-                $"Invalid transition: {Status} -> Running");
-        }
+            return Result<Unit, string>.Failure($"Invalid state transition {Status} -> Running");
         
         Status = WorkerStatusCode.Running;
+        
+        return Result.Success<string>();
     }
     
     public void UpdateHeartbeat()
-    {
-        if (Status != WorkerStatusCode.Running)
-        {
-            throw new InvalidOperationException(
-                "Heartbeat only valid for running workers");
-        }
-        
-        LastHeartbeatAt = DateTime.UtcNow;
-    }
+        => LastHeartbeatAt = DateTime.UtcNow;
 }
