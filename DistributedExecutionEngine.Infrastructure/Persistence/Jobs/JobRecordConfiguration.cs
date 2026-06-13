@@ -19,5 +19,8 @@ public class JobRecordConfiguration : IEntityTypeConfiguration<JobRecord>
         
         builder.HasIndex(x => x.JobId)
             .IsUnique();
+        
+        builder.Property(x => x.StatusCode)
+            .HasConversion<int>();
     }
 }
