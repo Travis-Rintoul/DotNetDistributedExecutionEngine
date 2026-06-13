@@ -1,9 +1,5 @@
 using DistributedExecutionEngine.Application.Abstractions;
 using DistributedExecutionEngine.Application.Abstractions.Messaging;
-using DistributedExecutionEngine.Application.Features.Jobs.Scheduling;
-using DistributedExecutionEngine.Application.Features.Workers.Supervision;
-using DistributedExecutionEngine.Domain.Aggregates.Jobs;
-using DistributedExecutionEngine.Domain.Common;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DistributedExecutionEngine.Application;
@@ -27,6 +23,7 @@ public static class DependencyInjection
         private void RegisterMessagingServices()
         {
             services.AddScoped<ICommandDispatcher, CommandDispatcher>();
+            services.AddScoped<IQueryDispatcher, QueryDispatcher>();
         }
 
         private void RegisterCommandServices()
