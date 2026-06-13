@@ -12,5 +12,5 @@ public class ReconcileWorkerPoolCommandHandler(
 ) : ICommandHandler<ReconcileWorkerPoolCommand, Result<Option<WorkerId>, string>>
 {
     public async Task<Result<Option<WorkerId>, string>> HandleAsync(ReconcileWorkerPoolCommand command, CancellationToken token = default)
-        => await store.ReconcileAsync(clock.UtcNow, token);
+        => await store.ReconcileAsync(token);
 }
