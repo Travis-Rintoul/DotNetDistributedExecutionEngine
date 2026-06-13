@@ -4,4 +4,4 @@ using DistributedExecutionEngine.Domain.Common;
 
 namespace DistributedExecutionEngine.Application.Features.Jobs.Scheduling;
 
-public class ScheduleJobCommand(Job job) : ICommand<Result<JobId, ScheduleJobError>>;
+public sealed record ScheduleJobCommand(Job Job) : ICommand<Result<JobId, ScheduleJobError>>;
