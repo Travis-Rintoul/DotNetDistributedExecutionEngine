@@ -4,6 +4,6 @@ namespace DistributedExecutionEngine.Domain.Aggregates.Workers;
 
 public abstract record WorkerLease
 {
-    public sealed record Unclaimed : WorkerLease;
-    public sealed record Claimed(SupervisorId SupervisorId, DateTimeOffset ClaimedUtc) : WorkerLease;
+    public sealed record Available : WorkerLease;
+    public sealed record Leased(SupervisorId SupervisorId, DateTimeOffset ClaimedUtc, DateTimeOffset ClaimExpires) : WorkerLease;
 }
