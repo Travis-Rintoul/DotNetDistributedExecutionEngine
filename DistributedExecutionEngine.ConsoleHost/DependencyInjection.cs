@@ -4,15 +4,12 @@ namespace DistributedExecutionEngine.ConsoleHost;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddWorkerProvisionerHost(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        services.AddHostedService<WorkerProvisionerBackgroundService>();
-        return services;
-    }
-    
-    public static IServiceCollection AddSupervisorHost(this IServiceCollection services)
-    {
-        services.AddHostedService<WorkerSupervisorBackgroundService>();
-        return services;
+        public void AddWorkerProvisionerHost()
+            => services.AddHostedService<WorkerProvisionerBackgroundService>();
+
+        public void AddSupervisorHost()
+            => services.AddHostedService<WorkerSupervisorBackgroundService>();
     }
 }
