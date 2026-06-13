@@ -1,58 +1,60 @@
+using DistributedExecutionEngine.Domain.Aggregates.Workers;
 using DistributedExecutionEngine.Domain.Common;
 
 namespace DistributedExecutionEngine.Domain.Aggregates.Jobs;
 
-public abstract record JobStatus
-{
-    public sealed record Pending() : JobStatus;
-
-    public sealed record Running(DateTime StartedUtc) : JobStatus;
-
-    public sealed record Completed : JobStatus
-    {
-        public DateTime StartedUtc { get; init; }
-        public DateTime CompletedUtc { get; init; }
-    }
-
-    public sealed record Failed : JobStatus
-    {
-        public DateTime FailedUtc { get; init; }
-        public string Reason { get; init; } = string.Empty;
-    }
-}
-
 public sealed class Job
 {
     public JobId JobId { get; private init; }
-    public DateTime CreatedUtc { get; private set; }
+    public DateTimeOffset CreatedUtc { get; private init; }
+
     public JobStatus Status { get; private set; }
-    public Option<DateTime> LeasedUtc { get; private set; }
-    
-    public string? PayloadJson { get; set; }
-    public string? JobType { get; set; } = null!;
+    public JobLease Lease { get; private set; }
+    public string JobType { get; private init; } = null!;
+    public string? PayloadJson { get; private init; }
+    public int AttemptsCount { get; private set; }
+    public int MaxAttemptsCount { get; private init; }
+    public Option<WorkerId> AssignedWorkerId { get; private init; }
 
-    public int? AssignedWorkerId { get; set; }
-    public int AttemptsCount { get; set; }
-    public int MaxAttemptsCount { get; set; }
-
-    public static Job Create(string jobType, string? payloadJson)
+    public static Job Create(string jobType, string? payloadJson = "GENERIC")
     {
         return new Job
         {
-            JobId = new JobId(),
-            Status = new JobStatus.Pending(),
-            PayloadJson = payloadJson,
+            JobId = JobId.New(),
             JobType = jobType,
+            PayloadJson = payloadJson,
             CreatedUtc = DateTime.UtcNow,
+            AssignedWorkerId = Option<WorkerId>.None,
+            Status = new JobStatus.Pending(),
+            Lease = new JobLease.Available(),
+        };
+    }
+    
+    public static Job Rehydrate(
+        Guid jobId,
+        string jobType,
+        string? payloadJson,
+        JobStatus status,
+        JobLease lease,
+        DateTimeOffset createdUtc,
+        int attemptsCount,
+        int maxAttemptsCount, 
+        Option<WorkerId> assignedWorkerId)
+    {
+        return new Job
+        {
+            JobId = JobId.From(jobId),
+            JobType = jobType,
+            PayloadJson = payloadJson,
+            Status = status,
+            Lease = lease,
+            CreatedUtc = createdUtc,
+            AttemptsCount = attemptsCount,
+            MaxAttemptsCount = maxAttemptsCount,
+            AssignedWorkerId = Option<WorkerId>.None,
         };
     }
 
-    public void AssignWorker(int workerId)
-    {
-        AssignedWorkerId = workerId;
-        LeasedUtc = Option<DateTime>.Some(DateTime.UtcNow);
-    }
-    
     public void MarkRunning()
     {
         Status = new JobStatus.Running(DateTime.UtcNow);
@@ -61,5 +63,15 @@ public sealed class Job
     public void MarkPending()
     {
         Status = new JobStatus.Pending();
+    }
+
+    public void LeaseJob(DateTimeOffset leasedUtc, WorkerId workerId)
+    {
+        Lease = new JobLease.Leased(leasedUtc, workerId);
+    }
+    
+    public void FreeJob()
+    {
+        Lease = new JobLease.Available();
     }
 }
