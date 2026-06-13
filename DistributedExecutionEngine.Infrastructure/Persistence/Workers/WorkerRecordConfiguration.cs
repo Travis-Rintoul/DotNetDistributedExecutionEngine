@@ -15,21 +15,10 @@ public class WorkerRecordConfiguration: IEntityTypeConfiguration<WorkerRecord>
             .ValueGeneratedNever()
             .IsRequired();
 
-        builder.Property(x => x.SupervisorId)
-            .HasConversion<int?>(
-                supervisorId => supervisorId.HasValue
-                    ? supervisorId.Value.Value
-                    : null,
-                value => value.HasValue
-                    ? new SupervisorId(value.Value)
-                    : null)
-            .HasColumnType("integer")
-            .ValueGeneratedNever();
-
         builder.HasIndex(x => x.WorkerId)
             .IsUnique();
         
-        builder.Property(x => x.Status)
+        builder.Property(x => x.StatusCode)
             .HasConversion<int>();
     }
 }
