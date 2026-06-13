@@ -2,16 +2,9 @@ using DistributedExecutionEngine.Domain.Common;
 
 namespace DistributedExecutionEngine.Application.Abstractions;
 
-public abstract record MappingError
-{
-    public sealed record MissingRequiredValue(string FieldName) : MappingError;
-    public sealed record InvalidValue(string FieldName, string Reason) : MappingError;
-    public sealed record UnsupportedStatus(string Status) : MappingError;
-}
-
 public interface IToDomainMapper<in TPersistence, TDomain>
 {
-    Result<TDomain, MappingError> ToDomain(TPersistence persistence);
+    Result<TDomain, string> ToDomain(TPersistence persistence);
 }
 
 public interface IToPersistenceMapper<in TDomain, out TPersistence>
