@@ -5,4 +5,4 @@ using DistributedExecutionEngine.Domain.Common;
 
 namespace DistributedExecutionEngine.Application.Features.Workers.Lifecycle;
 
-public class LaunchWorkerCommand(WorkerId workerId, SupervisorId supervisorId) : ICommand<Result<Unit, string>> { }
+public record LaunchWorkerCommand(WorkerId WorkerId, SupervisorId SupervisorId) : ICommand<Result<Unit, string>> { }
