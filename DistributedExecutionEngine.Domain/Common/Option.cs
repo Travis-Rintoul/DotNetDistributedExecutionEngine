@@ -60,6 +60,35 @@ public class Option<T>
     }
 }
 
+public static class Option
+{
+    public static Option<T> Some<T>(T value)
+    {
+        return Option<T>.Some(value);
+    }
+
+    public static Option<T> None<T>()
+    {
+        return Option<T>.None;
+    }
+
+    public static Option<T> FromNullable<T>(T? value)
+        where T : struct
+    {
+        return value.HasValue
+            ? Option<T>.Some(value.Value)
+            : Option<T>.None;
+    }
+
+    public static Option<T> FromReference<T>(T? value)
+        where T : class
+    {
+        return value is null
+            ? Option<T>.None
+            : Option<T>.Some(value);
+    }
+}
+
 public static class OptionTaskExtensions
 {
     public static async Task<T> ValueOrThrowAsync<T>(this Task<Option<T>> optionTask, Func<Exception> exceptionFactory)
