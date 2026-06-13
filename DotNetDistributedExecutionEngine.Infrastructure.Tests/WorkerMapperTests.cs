@@ -93,8 +93,9 @@ public sealed class WorkerMapperTests
 
         record.StatusCode.Should().Be(WorkerStatusCode.Pending);
 
-        record.ClaimedUtc.Should().BeNull();
-        record.SupervisorId.Should().BeNull();
+        record.SupervisionLeasedUtc.Should().BeNull();
+        record.SupervisionLeasedBy.Should().BeNull();      
+        record.SupervisionLeaseExpiresUtc.Should().BeNull();
         record.StartedUtc.Should().BeNull();
         record.FailedUtc.Should().BeNull();
         record.FailureReason.Should().BeNull();
@@ -126,8 +127,9 @@ public sealed class WorkerMapperTests
 
         record.StatusCode.Should().Be(WorkerStatusCode.Pending);
 
-        record.ClaimedUtc.Should().BeNull();
-        record.SupervisorId.Should().BeNull();
+        record.SupervisionLeasedUtc.Should().BeNull();
+        record.SupervisionLeasedBy.Should().BeNull();      
+        record.SupervisionLeaseExpiresUtc.Should().BeNull();
         record.StartedUtc.Should().BeNull();
         record.FailedUtc.Should().BeNull();
         record.FailureReason.Should().BeNull();
@@ -163,8 +165,9 @@ public sealed class WorkerMapperTests
         record.FailedUtc.Should().Be(failedUtc);
         record.FailureReason.Should().Be("worker crashed");
 
-        record.ClaimedUtc.Should().BeNull();
-        record.SupervisorId.Should().BeNull();
+        record.SupervisionLeasedUtc.Should().BeNull();
+        record.SupervisionLeasedBy.Should().BeNull();      
+        record.SupervisionLeaseExpiresUtc.Should().BeNull();
         record.StartedUtc.Should().BeNull();
         record.StoppedUtc.Should().BeNull();
     }
@@ -177,10 +180,10 @@ public sealed class WorkerMapperTests
             Hostname = "dirty-worker",
             MaxConcurrency = 99,
             CreatedUtc = new DateTimeOffset(2020, 1, 1, 0, 0, 0, TimeSpan.Zero),
-
             StatusCode = WorkerStatusCode.Running,
-            ClaimedUtc = new DateTimeOffset(2026, 6, 1, 10, 0, 0, TimeSpan.Zero),
-            SupervisorId = 123,
+            SupervisionLeasedUtc = new DateTimeOffset(2026, 6, 1, 10, 0, 0, TimeSpan.Zero),
+            SupervisionLeasedBy = 123,
+            SupervisionLeaseExpiresUtc = new DateTimeOffset(2026, 6, 1, 10, 0, 0, TimeSpan.Zero), 
             StartedUtc = new DateTimeOffset(2026, 6, 1, 10, 1, 0, TimeSpan.Zero),
             FailedUtc = new DateTimeOffset(2026, 6, 1, 10, 2, 0, TimeSpan.Zero),
             FailureReason = "old failure",
