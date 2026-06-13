@@ -2,6 +2,6 @@ namespace DistributedExecutionEngine.Infrastructure.Persistence.Workers.WorkerLe
 
 public enum WorkerLeaseStatusCode
 {
-    Unclaimed = 0,
-    Claimed = 1,
+    Available = 0,
+    Leased = 1,
 }
