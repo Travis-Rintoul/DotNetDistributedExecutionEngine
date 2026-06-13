@@ -1,11 +1,16 @@
+using DistributedExecutionEngine.Application.Abstractions;
 using DistributedExecutionEngine.Application.Abstractions.Persistence;
+using DistributedExecutionEngine.Application.Features.Jobs.Persistence;
 using DistributedExecutionEngine.Domain.Aggregates.Jobs;
 using DistributedExecutionEngine.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace DistributedExecutionEngine.Infrastructure.Persistence.Jobs;
 
-public sealed class JobRepository(DistributedExecutionDbContext context) : IAggregateRepository<Job, JobId>
+public sealed class JobRepository(
+    IJobMapper jobMapper,
+    DistributedExecutionDbContext context
+) : IJobRepository
 {
     private async Task<JobRecord?> FindRecordByKey(Guid jobId, CancellationToken ct) =>
         await context.Jobs
@@ -17,7 +22,7 @@ public sealed class JobRepository(DistributedExecutionDbContext context) : IAggr
         if (record is null)
             return Option<Job>.None;
 
-        return JobMapper.ToDomain(record).Match(
+        return jobMapper.ToDomain(record).Match(
             success: Option<Job>.Some,
             failure: error => throw new InvalidOperationException(
                 $"Failed to map JobRecord '{record.JobId}' to domain Job. Error: {error}"));
@@ -25,7 +30,7 @@ public sealed class JobRepository(DistributedExecutionDbContext context) : IAggr
 
     public async Task AddAsync(Job aggregate, CancellationToken ct = default)
     {
-        var record = JobMapper.ToPersistence(aggregate);
+        var record = jobMapper.ToPersistence(aggregate);
         await context.Jobs.AddAsync(record, ct);
     }
 
@@ -35,6 +40,6 @@ public sealed class JobRepository(DistributedExecutionDbContext context) : IAggr
         if (record is null)
             throw new InvalidOperationException($"Job record '{aggregate.JobId.Value}' not found.");
 
-        JobMapper.ApplyToRecord(aggregate, record);
+        jobMapper.ApplyToRecord(aggregate, record);
     }
 }
