@@ -4,7 +4,7 @@ using DistributedExecutionEngine.Domain.Common;
 
 namespace DistributedExecutionEngine.Application.Features.Jobs.Leasing;
 
-public sealed record LeaseJobCommand : ICommand<Option<JobLease>>
+public sealed record LeaseJobForWorkerCommand(WorkerId WorkerId) : ICommand<Option<JobWorkerLease>>
 {
-    public WorkerId WorkerId { get; set; }
+    
 }

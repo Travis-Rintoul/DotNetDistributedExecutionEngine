@@ -4,14 +4,13 @@ using DistributedExecutionEngine.Domain.Aggregates.Workers;
 
 namespace DistributedExecutionEngine.Application.Features.Jobs.Leasing;
 
-public sealed record JobLease
+public sealed record JobWorkerLease
 {
-    public JobId JobId { get; }
-    public WorkerId WorkerId { get; }
-    public DateTimeOffset ExpiresAt { get; }
+    public JobId JobId { get; init; }
+    public WorkerId WorkerId { get; init; }
+    public DateTimeOffset LeasedAtUtc { get; init; }
+    public DateTimeOffset ExpiresAtUtc { get; init; }
 
     public bool IsExpired(IClock clock)
-    {
-        return clock.UtcNow >= ExpiresAt;
-    }
+        => clock.UtcNow >= ExpiresAtUtc;
 }

@@ -5,5 +5,5 @@ namespace DistributedExecutionEngine.Application.Features.Jobs.Leasing;
 
 public interface IJobLeaseStore
 {
-    public Task<Option<JobLease>> TryLeaseNextJob(WorkerId jobId, CancellationToken token);
+    public Task<Option<JobWorkerLease>> TryLeaseNextJobAsync(WorkerId workerId, CancellationToken token);
 }
