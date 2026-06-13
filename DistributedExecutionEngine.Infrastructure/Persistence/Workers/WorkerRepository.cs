@@ -6,7 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DistributedExecutionEngine.Infrastructure.Persistence.Workers;
 
-public sealed class WorkerRepository(DistributedExecutionDbContext context, IAggregateMapper<WorkerRecord, Worker> workerMapper) : IAggregateRepository<Worker, WorkerId>
+public sealed class WorkerRepository(
+    IWorkerMapper workerMapper,
+    DistributedExecutionDbContext context
+) : IWorkerRepository
 {
     private async Task<WorkerRecord?> FindRecordByKey(WorkerId key, CancellationToken ct = default) => 
         await context.Workers
@@ -18,7 +21,7 @@ public sealed class WorkerRepository(DistributedExecutionDbContext context, IAgg
         if (record == null)
             return Option<Worker>.None;
         
-        return WorkerMapper.ToDomain(record).Match(
+        return workerMapper.ToDomain(record).Match(
             success: Option<Worker>.Some,
             failure: error => throw new InvalidOperationException(
                 $"Failed to map JobRecord '{record.WorkerId}' to domain Job. Error: {error}"));
@@ -26,13 +29,12 @@ public sealed class WorkerRepository(DistributedExecutionDbContext context, IAgg
 
     public async Task AddAsync(Worker aggregate, CancellationToken ct = default)
     {
-        var record = WorkerMapper.ToPersistence(aggregate);
+        var record = workerMapper.ToPersistence(aggregate);
         await context.Workers.AddAsync(record, ct);
     }
 
     public async Task UpdateAsync(Worker aggregate, CancellationToken ct = default)
     {
-        
         throw new NotImplementedException();
     }
 }
