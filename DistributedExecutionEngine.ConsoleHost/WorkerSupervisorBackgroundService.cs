@@ -1,5 +1,6 @@
 using DistributedExecutionEngine.Application.Abstractions.Messaging;
 using DistributedExecutionEngine.Application.Features.Workers.Supervision;
+using DistributedExecutionEngine.Domain.Aggregates.Supervisor;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,7 @@ namespace DistributedExecutionEngine.ConsoleHost;
 
 public class WorkerSupervisorBackgroundService(
     ILogger<WorkerSupervisorBackgroundService> logger,
+    IWorkerProcessLauncher workerLauncher,
     IServiceScopeFactory scopeFactory
 ) : BackgroundService
 {
@@ -25,10 +27,19 @@ public class WorkerSupervisorBackgroundService(
             {
                 using var scope = scopeFactory.CreateScope();
                 var dispatcher = scope.ServiceProvider.GetRequiredService<ICommandDispatcher>();
-                var superviseResult = await dispatcher.SendAsync(new SuperviseWorkersCommand(supervisorId), token);
-                if (superviseResult.IsFailure)
+
+                var claimPendingResult = await dispatcher.SendAsync(new ClaimPendingWorkersForSupervisorCommand(supervisorId), token);
+                if (claimPendingResult.IsFailure)
+                    logger.LogError("[WorkerSupervisor] ClaimPendingWorkersForSupervisorCommand failed");
+
+                foreach (var pendingWorkerId in claimPendingResult.Value)
                 {
-                    logger.LogError("[WorkerSupervisor] SuperviseWorkersCommand failed");
+                    logger.LogInformation("[WorkerSupervisor] claimed worker {PendingWorkerId}", pendingWorkerId);
+                    var launchWorkerResult = await workerLauncher.LaunchAsync(pendingWorkerId, token);
+                    if (launchWorkerResult.IsSuccess)
+                        logger.LogInformation("[WorkerSupervisor] launched worker {PendingWorkerId} ProcessId: {ProcessId}", pendingWorkerId, launchWorkerResult.Value);
+                    else
+                        logger.LogError("[WorkerSupervisor] Launching worker failed");
                 }
             }
             catch (Exception ex)
@@ -36,7 +47,5 @@ public class WorkerSupervisorBackgroundService(
                 logger.LogError(ex, "[Provisioner] Provisioner scaling failed");
             }
         }
-        
-        throw new NotImplementedException();
     }
 }
