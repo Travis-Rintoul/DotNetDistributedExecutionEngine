@@ -8,8 +8,8 @@ namespace DistributedExecutionEngine.ConsoleHost;
 
 public class WorkerProvisionerBackgroundService(
     ILogger<WorkerProvisionerBackgroundService> logger,
-    IServiceScopeFactory scopeFactory, 
-    ICommandDispatcher dispatcher) : BackgroundService
+    IServiceScopeFactory scopeFactory
+) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken token)
     {
@@ -28,6 +28,7 @@ public class WorkerProvisionerBackgroundService(
                 if (reconcileResult.IsFailure)
                 {
                     logger.LogError("[WorkerProvisioner] {ReconcileResultError}", reconcileResult.Error);
+                    continue;
                 }
                 
                 var reconcileOption = reconcileResult.Value;
