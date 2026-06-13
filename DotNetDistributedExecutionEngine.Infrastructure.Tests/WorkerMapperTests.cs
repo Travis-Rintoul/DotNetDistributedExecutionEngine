@@ -80,7 +80,7 @@ public sealed class WorkerMapperTests
             workerId: workerId,
             hostname: "worker-01",
             status: new WorkerStatus.Pending(),
-            lease: new WorkerLease.Unclaimed(),
+            lease: new WorkerLease.Available(),
             maxConcurrency: 8,
             createdUtc: createdUtc);
 
@@ -112,7 +112,7 @@ public sealed class WorkerMapperTests
             workerId: workerId,
             hostname: "worker-01",
             status: new WorkerStatus.Pending(),
-            lease: new WorkerLease.Unclaimed(),
+            lease: new WorkerLease.Available(),
             maxConcurrency: 8,
             createdUtc: createdUtc);
 
@@ -147,7 +147,7 @@ public sealed class WorkerMapperTests
             workerId: workerId,
             hostname: "worker-01",
             status: new WorkerStatus.Failed(failedUtc, "worker crashed"),
-            lease: new WorkerLease.Unclaimed(),
+            lease: new WorkerLease.Available(),
             maxConcurrency: 8,
             createdUtc: createdUtc);
 
