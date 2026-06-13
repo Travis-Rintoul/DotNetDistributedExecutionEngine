@@ -13,8 +13,8 @@ public class WorkerLeaseMapper : IWorkerLeaseMapper
     {
         return persistence.LeaseStatusCode switch
         {
-            WorkerLeaseStatusCode.Unclaimed => ToUnclaimed(persistence),
-            WorkerLeaseStatusCode.Claimed => ToClaimed(persistence),
+            WorkerLeaseStatusCode.Available => ToAvailable(persistence),
+            WorkerLeaseStatusCode.Leased => ToLeased(persistence),
             _ => Result<WorkerLease, string>.Failure(
                 $"Unknown worker lease status code: {persistence.LeaseStatusCode}.")
         };
@@ -26,26 +26,29 @@ public class WorkerLeaseMapper : IWorkerLeaseMapper
 
         if (domain is WorkerLease.Claimed claimed)
         {
-            record.SupervisorId = claimed.SupervisorId.Value;
-            record.ClaimedUtc = claimed.ClaimedUtc;
+            record.SupervisionLeasedBy = claimed.SupervisorId.Value;
+            record.SupervisionLeasedUtc = claimed.ClaimedUtc;
+            record.SupervisionLeaseExpiresUtc = claimed.ClaimedUtc;
         }
     }
+    
 
     private void ResetFields(IWorkerLeaseRecord record)
     {
-        record.SupervisorId = null;
-        record.ClaimedUtc = null;
+        record.SupervisionLeasedBy = null;
+        record.SupervisionLeasedUtc = null;
+        record.SupervisionLeaseExpiresUtc = null;
     }
 
-    private static Result<WorkerLease, string> ToUnclaimed(IWorkerLeaseRecord persistence)
+    private static Result<WorkerLease, string> ToAvailable(IWorkerLeaseRecord persistence)
     {
-        if (persistence.SupervisorId is not null)
+        if (persistence.SupervisionLeasedBy is not null)
         {
             return Result<WorkerLease, string>.Failure(
                 "Unclaimed worker lease must not have SupervisorId.");
         }
 
-        if (persistence.ClaimedUtc is not null)
+        if (persistence.SupervisionLeasedUtc is not null)
         {
             return Result<WorkerLease, string>.Failure(
                 "Unclaimed worker lease must not have ClaimedUtc.");
@@ -54,21 +57,27 @@ public class WorkerLeaseMapper : IWorkerLeaseMapper
         return Result<WorkerLease, string>.Success(new WorkerLease.Unclaimed());
     }
 
-    private static Result<WorkerLease, string> ToClaimed(IWorkerLeaseRecord persistence)
+    private static Result<WorkerLease, string> ToLeased(IWorkerLeaseRecord persistence)
     {
-        if (persistence.SupervisorId is not { } supervisorId)
+        if (persistence.SupervisionLeasedBy is not { } supervisorId)
         {
             return Result<WorkerLease, string>.Failure(
                 "Claimed worker lease must have SupervisorId.");
         }
 
-        if (persistence.ClaimedUtc is not { } claimedUtc)
+        if (persistence.SupervisionLeasedUtc is not { } claimedUtc)
+        {
+            return Result<WorkerLease, string>.Failure(
+                "Claimed worker lease must have ClaimedUtc.");
+        }
+        
+        if (persistence.SupervisionLeaseExpiresUtc is not { } expiresUtc)
         {
             return Result<WorkerLease, string>.Failure(
                 "Claimed worker lease must have ClaimedUtc.");
         }
 
         return Result<WorkerLease, string>.Success(
-            new WorkerLease.Claimed(SupervisorId.From(supervisorId), claimedUtc));
+            new WorkerLease.Claimed(SupervisorId.From(supervisorId), claimedUtc, expiresUtc));
     }
 }
