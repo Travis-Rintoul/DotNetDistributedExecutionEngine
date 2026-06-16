@@ -1,6 +1,7 @@
 using DistributedExecutionEngine.Application.Abstractions;
 using DistributedExecutionEngine.Domain.Aggregates.Workers;
 using DistributedExecutionEngine.Infrastructure.Persistence.Workers;
+using DistributedExecutionEngine.Infrastructure.Persistence.Workers.Runtime;
 using DistributedExecutionEngine.Infrastructure.Persistence.Workers.WorkerLeases;
 using DistributedExecutionEngine.Infrastructure.Persistence.Workers.WorkerStatuses;
 using FluentAssertions;
@@ -16,8 +17,9 @@ public sealed class WorkerMapperTests
     {
         var workerStatusMapper = new WorkerStatusMapper();
         var workerLeaseMapper = new WorkerLeaseMapper();
+        var workerRuntimeMapper = new WorkerRuntimeMapper();
 
-        _workerMapper = new WorkerMapper(workerStatusMapper, workerLeaseMapper);
+        _workerMapper = new WorkerMapper(workerStatusMapper, workerLeaseMapper, workerRuntimeMapper);
     }
 
     [Fact]
@@ -81,7 +83,7 @@ public sealed class WorkerMapperTests
             hostname: "worker-01",
             status: new WorkerStatus.Pending(),
             lease: new WorkerLease.Available(),
-            maxConcurrency: 8,
+            runtime: new WorkerRuntime.Pending(),
             createdUtc: createdUtc);
 
         var record = _workerMapper.ToPersistence(worker);
@@ -113,7 +115,7 @@ public sealed class WorkerMapperTests
             hostname: "worker-01",
             status: new WorkerStatus.Pending(),
             lease: new WorkerLease.Available(),
-            maxConcurrency: 8,
+            runtime: new WorkerRuntime.Pending(),
             createdUtc: createdUtc);
 
         var record = DirtyRecord();
@@ -148,7 +150,7 @@ public sealed class WorkerMapperTests
             hostname: "worker-01",
             status: new WorkerStatus.Failed(failedUtc, "worker crashed"),
             lease: new WorkerLease.Available(),
-            maxConcurrency: 8,
+            runtime: new WorkerRuntime.Pending(),
             createdUtc: createdUtc);
 
         var record = DirtyRecord();
