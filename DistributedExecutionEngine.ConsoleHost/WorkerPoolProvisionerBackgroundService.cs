@@ -24,7 +24,7 @@ public class WorkerProvisionerBackgroundService(
                 using var scope = scopeFactory.CreateScope();
                 var dispatcher = scope.ServiceProvider.GetRequiredService<ICommandDispatcher>();
 
-                var reconcileResult = await dispatcher.SendAsync(new ReconcileWorkerPoolCommand(), token);
+                var reconcileResult = await dispatcher.SendAsync(new EnsureWorkerCapacityCommand(), token);
                 if (reconcileResult.IsFailure)
                 {
                     logger.LogError("[WorkerProvisioner] {ReconcileResultError}", reconcileResult.Error);
