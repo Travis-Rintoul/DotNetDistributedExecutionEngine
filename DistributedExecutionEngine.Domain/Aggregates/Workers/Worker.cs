@@ -12,6 +12,7 @@ public sealed class Worker
     public Option<DateTimeOffset> LastHeartbeatAt { get; private set; } = Option<DateTimeOffset>.None;
     public WorkerLease Lease { get; private set; } = new WorkerLease.Available();
     public WorkerStatus Status { get; private set; } = new WorkerStatus.Pending();
+    public WorkerRuntime Runtime { get; private set; } = new WorkerRuntime.Pending();
     public int MaxConcurrency { get; private set; }
 
     public static Worker Create(string hostname = "worker")
@@ -30,10 +31,10 @@ public sealed class Worker
     public static Worker Rehydrate(
         Guid workerId,
         string hostname,
+        DateTimeOffset createdUtc,
         WorkerStatus status,
         WorkerLease lease,
-        int maxConcurrency,
-        DateTimeOffset createdUtc
+        WorkerRuntime runtime
     )
     {
         return new Worker
@@ -41,8 +42,8 @@ public sealed class Worker
             WorkerId = WorkerId.From(workerId),
             Hostname = hostname,
             Status = status,
-            Lease =  lease,
-            MaxConcurrency = maxConcurrency,
+            Lease = lease,
+            Runtime = runtime,
             CreatedUtc = createdUtc
         };
     }
