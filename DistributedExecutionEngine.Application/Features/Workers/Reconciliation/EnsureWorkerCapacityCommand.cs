@@ -5,4 +5,4 @@ using DistributedExecutionEngine.Domain.Common;
 
 namespace DistributedExecutionEngine.Application.Features.Workers.Reconciliation;
 
-public sealed record ReconcileWorkerPoolCommand() : ICommand<Result<Option<WorkerId>, string>>;
+public sealed record EnsureWorkerCapacityCommand() : ICommand<Result<Option<WorkerId>, string>>;

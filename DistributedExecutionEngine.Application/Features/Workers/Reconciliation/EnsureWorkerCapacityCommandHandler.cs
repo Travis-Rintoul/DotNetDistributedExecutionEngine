@@ -6,11 +6,11 @@ using DistributedExecutionEngine.Domain.Common;
 
 namespace DistributedExecutionEngine.Application.Features.Workers.Reconciliation;
 
-public class ReconcileWorkerPoolCommandHandler(
+public class EnsureWorkerCapacityCommandHandler(
     IClock clock,
     IWorkerPoolStore store
-) : ICommandHandler<ReconcileWorkerPoolCommand, Result<Option<WorkerId>, string>>
+) : ICommandHandler<EnsureWorkerCapacityCommand, Result<Option<WorkerId>, string>>
 {
-    public async Task<Result<Option<WorkerId>, string>> HandleAsync(ReconcileWorkerPoolCommand command, CancellationToken token = default)
-        => await store.ReconcileAsync(token);
+    public async Task<Result<Option<WorkerId>, string>> HandleAsync(EnsureWorkerCapacityCommand command, CancellationToken token = default)
+        => await store.TryProvisionWorkerForPendingJobsAsync(token);
 }
