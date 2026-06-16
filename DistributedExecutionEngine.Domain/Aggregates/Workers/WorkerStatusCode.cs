@@ -7,5 +7,6 @@ public enum WorkerStatusCode
     Running = 2,  // Healthy and processing
     Failed = 3,   // Failed to start or crashed
     Completed = 4,   // Gracefully stopped (optional but useful)
-    Canceled = 5
+    Canceled = 5,
+    Lost = 6
 }
