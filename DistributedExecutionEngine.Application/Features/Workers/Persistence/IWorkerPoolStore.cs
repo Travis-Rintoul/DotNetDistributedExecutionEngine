@@ -11,5 +11,5 @@ public interface IWorkerPoolStore
     
     Task<Result<IReadOnlyList<WorkerId>, string>> ClaimWorkersForSupervision(SupervisorId supervisorId, int limit, CancellationToken cancellationToken);
 
-    Task<Result<Option<WorkerId>, string>> ReconcileAsync(CancellationToken cancellationToken);
+    Task<Result<Option<WorkerId>, string>> TryProvisionWorkerForPendingJobsAsync(CancellationToken cancellationToken);
 }
