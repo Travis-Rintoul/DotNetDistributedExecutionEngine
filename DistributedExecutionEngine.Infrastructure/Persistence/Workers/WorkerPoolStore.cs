@@ -190,7 +190,7 @@ public class WorkerPoolStore(
         return Result.Success<IReadOnlyList<WorkerId>, string>(workerIds);
     }
 
-    public async Task<Result<Option<WorkerId>, string>> ReconcileAsync(CancellationToken cancellationToken)
+    public async Task<Result<Option<WorkerId>, string>> TryProvisionWorkerForPendingJobsAsync(CancellationToken cancellationToken)
     {
         await using var transaction = await context.Database.BeginTransactionAsync(cancellationToken);
         
