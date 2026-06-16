@@ -20,7 +20,7 @@ public class JobLeaseStore(IClock clock, DistributedExecutionDbContext context) 
             UPDATE "Jobs" j
             SET
                 "LeasedUtc" = @nowUtc,
-                "LeastStatusCode" = @leasedStatus,
+                "LeaseStatusCode" = @leasedStatus,
                 "LeaseExpirationUtc" = @leaseExpirationUtc,
                 "AssignedWorkerId" = @assignedWorkerId
             WHERE j."Id" = (
@@ -39,7 +39,7 @@ public class JobLeaseStore(IClock clock, DistributedExecutionDbContext context) 
             )
             RETURNING 
                 j."Id",
-                j."WorkerId",
+                j."AssignedWorkerId",
                 j."LeasedUtc",
                 j."LeaseExpirationUtc";
             """;
@@ -68,7 +68,7 @@ public class JobLeaseStore(IClock clock, DistributedExecutionDbContext context) 
             NpgsqlDbType = NpgsqlDbType.Integer
         });
         
-        command.Parameters.Add(new NpgsqlParameter<DateTimeOffset>("leasedStatus", leaseExpiresUtc)
+        command.Parameters.Add(new NpgsqlParameter<DateTimeOffset>("leaseExpirationUtc", leaseExpiresUtc)
         {
             NpgsqlDbType = NpgsqlDbType.TimestampTz
         });
@@ -87,7 +87,7 @@ public class JobLeaseStore(IClock clock, DistributedExecutionDbContext context) 
         {
             NpgsqlDbType = NpgsqlDbType.Integer
         });
-        
+
         await using var reader = await command.ExecuteReaderAsync(cancellationToken);
         if (!await reader.ReadAsync(cancellationToken))
             return Option<JobWorkerLease>.None;
