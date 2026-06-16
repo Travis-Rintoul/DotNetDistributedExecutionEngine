@@ -24,14 +24,13 @@ public class WorkerLeaseMapper : IWorkerLeaseMapper
     {
         ResetFields(record);
 
-        if (domain is WorkerLease.Claimed claimed)
+        if (domain is WorkerLease.Leased leased)
         {
-            record.SupervisionLeasedBy = claimed.SupervisorId.Value;
-            record.SupervisionLeasedUtc = claimed.ClaimedUtc;
-            record.SupervisionLeaseExpiresUtc = claimed.ClaimedUtc;
+            record.SupervisionLeasedBy = leased.SupervisorId.Value;
+            record.SupervisionLeasedUtc = leased.ClaimedUtc;
+            record.SupervisionLeaseExpiresUtc = leased.ClaimedUtc;
         }
     }
-    
 
     private void ResetFields(IWorkerLeaseRecord record)
     {
@@ -54,30 +53,24 @@ public class WorkerLeaseMapper : IWorkerLeaseMapper
                 "Unclaimed worker lease must not have ClaimedUtc.");
         }
 
-        return Result<WorkerLease, string>.Success(new WorkerLease.Unclaimed());
+        return Result<WorkerLease, string>.Success(new WorkerLease.Available());
     }
 
     private static Result<WorkerLease, string> ToLeased(IWorkerLeaseRecord persistence)
     {
         if (persistence.SupervisionLeasedBy is not { } supervisorId)
-        {
             return Result<WorkerLease, string>.Failure(
                 "Claimed worker lease must have SupervisorId.");
-        }
 
         if (persistence.SupervisionLeasedUtc is not { } claimedUtc)
-        {
             return Result<WorkerLease, string>.Failure(
                 "Claimed worker lease must have ClaimedUtc.");
-        }
         
         if (persistence.SupervisionLeaseExpiresUtc is not { } expiresUtc)
-        {
             return Result<WorkerLease, string>.Failure(
                 "Claimed worker lease must have ClaimedUtc.");
-        }
 
         return Result<WorkerLease, string>.Success(
-            new WorkerLease.Claimed(SupervisorId.From(supervisorId), claimedUtc, expiresUtc));
+            new WorkerLease.Leased(SupervisorId.From(supervisorId), claimedUtc, expiresUtc));
     }
 }

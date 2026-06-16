@@ -1,3 +1,5 @@
+using DistributedExecutionEngine.Domain.Aggregates.Workers;
+
 namespace DistributedExecutionEngine.Infrastructure.Persistence.Workers.WorkerLeases;
 
 public interface IWorkerLeaseRecord
