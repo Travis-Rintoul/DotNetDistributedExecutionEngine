@@ -1,6 +1,5 @@
 using System.Diagnostics;
-using DistributedExecutionEngine.Application.Abstractions;
-using DistributedExecutionEngine.Application.Features.Workers.Supervision;
+using DistributedExecutionEngine.Application.Features.Workers.Process;
 using DistributedExecutionEngine.Domain.Aggregates.Workers;
 using DistributedExecutionEngine.Domain.Common;
 using Microsoft.Extensions.Configuration;

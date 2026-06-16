@@ -4,7 +4,7 @@ using DistributedExecutionEngine.Application.Features.Jobs.Leasing;
 using DistributedExecutionEngine.Application.Features.Jobs.Persistence;
 using DistributedExecutionEngine.Application.Features.JobTypes.Persistence;
 using DistributedExecutionEngine.Application.Features.Workers.Persistence;
-using DistributedExecutionEngine.Application.Features.Workers.Supervision;
+using DistributedExecutionEngine.Application.Features.Workers.Process;
 using DistributedExecutionEngine.Domain.Aggregates.Jobs;
 using DistributedExecutionEngine.Domain.Aggregates.Workers;
 using DistributedExecutionEngine.Infrastructure.Persistence;
@@ -13,6 +13,7 @@ using DistributedExecutionEngine.Infrastructure.Persistence.Jobs.JobLeasing;
 using DistributedExecutionEngine.Infrastructure.Persistence.Jobs.JobStatuses;
 using DistributedExecutionEngine.Infrastructure.Persistence.JobTypes;
 using DistributedExecutionEngine.Infrastructure.Persistence.Workers;
+using DistributedExecutionEngine.Infrastructure.Persistence.Workers.Runtime;
 using DistributedExecutionEngine.Infrastructure.Persistence.Workers.WorkerLeases;
 using DistributedExecutionEngine.Infrastructure.Persistence.Workers.WorkerStatuses;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,7 @@ public static class DependencyInjection
         services.AddScoped<IWorkerMapper, WorkerMapper>();
         services.AddScoped<IWorkerStatusMapper, WorkerStatusMapper>();
         services.AddScoped<IWorkerLeaseMapper, WorkerLeaseMapper>();
+        services.AddScoped<IWorkerRuntimeMapper, WorkerRuntimeMapper>();
         
         services.AddScoped<IJobMapper, JobMapper>();
         services.AddScoped<IJobStatusMapper, JobStatusMapper>();
