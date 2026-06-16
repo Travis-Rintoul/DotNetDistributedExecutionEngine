@@ -1,4 +1,6 @@
 using DistributedExecutionEngine.Application.Abstractions.Messaging;
+using DistributedExecutionEngine.Application.Features.Workers.Lifecycle;
+using DistributedExecutionEngine.Application.Features.Workers.Process;
 using DistributedExecutionEngine.Application.Features.Workers.Supervision;
 using DistributedExecutionEngine.Domain.Aggregates.Supervisor;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,7 +37,8 @@ public class WorkerSupervisorBackgroundService(
                 foreach (var pendingWorkerId in claimPendingResult.Value)
                 {
                     logger.LogInformation("[WorkerSupervisor] claimed worker {PendingWorkerId}", pendingWorkerId);
-                    var launchWorkerResult = await workerLauncher.LaunchAsync(pendingWorkerId, token);
+                    
+                    var launchWorkerResult = await dispatcher.SendAsync(new LaunchWorkerCommand(pendingWorkerId, supervisorId), token);
                     if (launchWorkerResult.IsSuccess)
                         logger.LogInformation("[WorkerSupervisor] launched worker {PendingWorkerId} ProcessId: {ProcessId}", pendingWorkerId, launchWorkerResult.Value);
                     else
